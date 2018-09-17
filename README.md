@@ -23,7 +23,7 @@ clouddatabases-redis-helloworld-nodejs is a sample IBM Cloud application which s
       The database can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-redis" and we wanted it to be a "databases-for-redis" deployment on the standard plan running in the us-south region, the command would look like this:
 
       ```shell
-      ibmcloud resource service-instance-create example-psql databases-for-redis standard us-south
+      ibmcloud resource service-instance-create example-redis databases-for-redis standard us-south
       ```
       Remember the database service instance name.
 
@@ -44,7 +44,7 @@ clouddatabases-redis-helloworld-nodejs is a sample IBM Cloud application which s
    The alias name can be the same as the database service instance name. So, for our database created in step 4, we could do:
 
    ```shell
-   ibmcloud resource service-alias-create example-psql --instance-name example-redis
+   ibmcloud resource service-alias-create example-redis --instance-name example-redis
    ```
 
 7. Clone the app to your local environment from your terminal using the following command:

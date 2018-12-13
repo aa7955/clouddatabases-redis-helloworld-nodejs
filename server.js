@@ -42,33 +42,19 @@ let port = process.env.PORT || 8080;
 // Then we'll pull in the database client library
 const redis = require("redis");
 
-// Now lets get cfenv and ask it to parse the environment variable
-let cfenv = require('cfenv');
+let credentials;
 
-// load local VCAP configuration  and service credentials
-let vcapLocal;
-try {
-  vcapLocal = require('./vcap-local.json');
-  console.log("Loaded local VCAP");
-} catch (e) { 
-    // console.log(e)
+// Retrieve the Kubernetes environment variables from BINDING in the clouddb-deployment
+// Check to make sure that the BINDING environment variable is present
+// If it's not present, then it will throw an error
+if (process.env.BINDING) {
+    credentials = JSON.parse(process.env.BINDING);
 }
 
-const appEnvOpts = vcapLocal ? { vcap: vcapLocal} : {}
-const appEnv = cfenv.getAppEnv(appEnvOpts);
-
-// Within the application environment (appenv) there's a services object
-let services = appEnv.services;
-
-// The services object is a map named by service so we extract the one for Redis
-let redis_services = services["databases-for-redis"];
-
 // This check ensures there is a services for Redis databases
-assert(!util.isUndefined(redis_services), "Must be bound to databases-for-redis services");
+assert(!util.isUndefined(credentials), "Must be bound to IBM Kubernetes Cluster");
 
 // We now take the first bound Redis service and extract it's credentials object
-let credentials = redis_services[0].credentials;
-
 let redisconn = credentials.connection.rediss;
 
 let connectionString = redisconn.composed[0];
